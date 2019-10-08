@@ -1,8 +1,8 @@
 env/
 .ipynb_checkpoints/
 .env
-
 *.pyc
 *.ipynb
 .DS_STORE
 data/
+*.csv

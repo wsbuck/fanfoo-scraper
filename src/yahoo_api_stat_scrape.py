@@ -98,10 +98,12 @@ def main():
             'Authorization': f'Bearer {access_token}',
             'Content-Type': 'application/json',
         }
-        for player_id in player_ids.head(2):
-            time.sleep(10)
+        for i, player_id in enumerate(player_ids):
+            time.sleep(30)
+            print('\n******************\n')
+            print("{} / {}".format(i + 1, len(player_ids)))
             print(player_id)
-            for week in range(15):
+            for week in range(1, 15):
                 season_code = season_codes[season]
                 player_key = f'{season_code}.p.{player_id}'
                 temp_url = url.format(player_key, week)
