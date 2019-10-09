@@ -119,11 +119,12 @@ def main():
                 row = {}
                 row['player_id'] = player_id
                 row['season'] = season
-                row['week']
+                row['week'] = week
                 for stat_name in stat_categories:
                     row[stat_name] = get_stat(
                         stats, stat_categories[stat_name])
                 stats_df = stats_df.append(row, ignore_index=True)
+            stats_df.to_csv('./stats.csv')
     
     stats_df.to_csv('./stats.csv')
 
