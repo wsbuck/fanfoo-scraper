@@ -90,7 +90,7 @@ def main():
     )
 
     url = 'https://fantasysports.yahooapis.com/fantasy/v2/player/{}/ \
-        stats;type=week;week={}?format=json'
+        stats;type=week;week={}?format=json'.replace(' ', '')
 
     for season in season_codes:
         access_token = get_access_token()
@@ -99,7 +99,7 @@ def main():
             'Content-Type': 'application/json',
         }
         for i, player_id in enumerate(player_ids):
-            time.sleep(30)
+            time.sleep(10)
             print('\n******************\n')
             print("{} / {}".format(i + 1, len(player_ids)))
             print(player_id)
@@ -109,8 +109,9 @@ def main():
                 temp_url = url.format(player_key, week)
                 resp = requests.request('GET', url=temp_url, headers=headers)
                 if resp.status_code != 200:
-                    break
+                    print(resp.content)
                     print(f'Error retrieving player {player_key} for {week}')
+                    break
                     # raise Exception('Error retrieving player data')
                 stats = (
                     resp.json()['fantasy_content']
@@ -124,6 +125,7 @@ def main():
                     row[stat_name] = get_stat(
                         stats, stat_categories[stat_name])
                 stats_df = stats_df.append(row, ignore_index=True)
+                len(stats_df)
             stats_df.to_csv('./stats.csv')
     
     stats_df.to_csv('./stats.csv')
