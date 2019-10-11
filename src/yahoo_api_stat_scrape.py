@@ -93,12 +93,13 @@ def main():
         stats;type=week;week={}?format=json'.replace(' ', '')
 
     for season in season_codes:
-        access_token = get_access_token()
-        headers = {
-            'Authorization': f'Bearer {access_token}',
-            'Content-Type': 'application/json',
-        }
         for i, player_id in enumerate(player_ids):
+            if (i % 10 == 0):
+                access_token = get_access_token()
+                headers = {
+                    'Authorization': f'Bearer {access_token}',
+                    'Content-Type': 'application/json',
+                }
             time.sleep(10)
             print('\n******************\n')
             print("{} / {}".format(i + 1, len(player_ids)))
