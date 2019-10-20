@@ -79,6 +79,7 @@ def main():
 
     players = pd.concat([qb, rb, te, wr], sort=False)
     player_ids = players[players['data_src'] == 'Yahoo'][['src_id', 'id']]
+    player_ids = player_ids.reset_index()
     stats_df = pd.DataFrame(
         columns=[
             'player_id', 'yahoo_id', 'season', 'week',
@@ -94,7 +95,7 @@ def main():
 
     for season in season_codes:
         for i, row in player_ids.iterrows():
-            yahoo_id = row['player_id']
+            yahoo_id = row['src_id']
             player_id = row['id']
         # for i, player_id in enumerate(player_ids):
             if (i % 10 == 0):
