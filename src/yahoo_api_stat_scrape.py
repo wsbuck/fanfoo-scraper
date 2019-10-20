@@ -78,10 +78,10 @@ def main():
     wr = pd.read_csv('../data/WR_proj.csv')
 
     players = pd.concat([qb, rb, te, wr], sort=False)
-    player_ids = players[players['data_src'] == 'Yahoo']['src_id']
+    player_ids = players[players['data_src'] == 'Yahoo'][['src_id', 'id']]
     stats_df = pd.DataFrame(
         columns=[
-            'player_id', 'season', 'week',
+            'player_id', 'yahoo_id', 'season', 'week',
             'pass_attempts', 'pass_completions',
             'pass_yards', 'pass_tds', 'pass_interceptions', 'sacks',
             'rush_attempts', 'rush_yards', 'rec_targets', 'rec_receptions',
@@ -93,7 +93,10 @@ def main():
         stats;type=week;week={}?format=json'.replace(' ', '')
 
     for season in season_codes:
-        for i, player_id in enumerate(player_ids):
+        for i, row in player_ids.iterrows():
+            yahoo_id = row['player_id']
+            player_id = row['id']
+        # for i, player_id in enumerate(player_ids):
             if (i % 10 == 0):
                 access_token = get_access_token()
                 headers = {
@@ -103,10 +106,10 @@ def main():
             time.sleep(10)
             print('\n******************\n')
             print("{} / {}".format(i + 1, len(player_ids)))
-            print(player_id)
+            print(yahoo_id)
             for week in range(1, 15):
                 season_code = season_codes[season]
-                player_key = f'{season_code}.p.{player_id}'
+                player_key = f'{season_code}.p.{yahoo_id}'
                 temp_url = url.format(player_key, week)
                 resp = requests.request('GET', url=temp_url, headers=headers)
                 if resp.status_code != 200:
@@ -120,6 +123,7 @@ def main():
                 )
                 row = {}
                 row['player_id'] = player_id
+                row['yahoo_id'] = yahoo_id
                 row['season'] = season
                 row['week'] = week
                 for stat_name in stat_categories:
